@@ -1,7 +1,9 @@
 import os
 import requests
-from config import load_env
+from config import load_env, get_Logger
 load_env()
+
+logger = get_Logger()
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_USERNAME = os.getenv("GITHUB_USERNAME")
@@ -20,8 +22,8 @@ def crear_repo_remoto(nombre_repo):
     response = requests.post(url, headers=headers, json=data)
 
     if response.status_code == 201:
-        print(f"🌐 Repo remoto creado: https://github.com/{GITHUB_USERNAME}/{nombre_repo}")
+        logger.info(f"🌐 Repo remoto creado: https://github.com/{GITHUB_USERNAME}/{nombre_repo}")
         return f"https://github.com/{GITHUB_USERNAME}/{nombre_repo}.git"
     else:
-        print("❌ Error al crear el repo remoto:", response.json())
+        logger.error("❌ Error al crear el repo remoto:", exc_info=response.json())
         return None

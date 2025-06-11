@@ -1,12 +1,16 @@
 import subprocess
 import os
+from config import get_Logger
+
+logger = get_Logger()
 
 def execute_action(accion, params):
     if accion == "crear_repo":
         nombre = params["nombre"]
         os.makedirs(nombre, exist_ok=True)
         subprocess.run(["git", "init"], cwd=nombre)
-        print(f"✅ Repositorio '{nombre}' creado")
+        # En caso de no querer este Mensaje en el Archvio de Logs cambiarlo a `.debug()`
+        logger.info(f"✅ Repositorio '{nombre}' creado")
 
         from github_api import crear_repo_remoto
         url_remoto = crear_repo_remoto(nombre)
@@ -17,17 +21,17 @@ def execute_action(accion, params):
             subprocess.run(["git", "add", "."], cwd=nombre)
             subprocess.run(["git", "commit", "-m", "primer commit"], cwd=nombre)
             subprocess.run(["git", "push", "-u", "origin", "main"], cwd=nombre)
-            print("🚀 Subido al repositorio remoto")
+            logger.info("🚀 Subido al repositorio remoto")
 
     elif accion == "commit":
         mensaje = params["mensaje"]
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", mensaje], check=True)
-        print(f"✅ Commit realizado: {mensaje}")
+        logger.info(f"✅ Commit realizado: {mensaje}")
 
     elif accion == "push":
         subprocess.run(["git", "push"], check=True)
-        print("✅ Cambios enviados al repositorio remoto")
+        logger.info("✅ Cambios enviados al repositorio remoto")
 
     elif accion == "desconocido":
-        print("⚠️ No entendí la acción que me pediste.")
+        logger.info("⚠️ No entendí la acción que me pediste.")
