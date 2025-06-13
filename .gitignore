@@ -1,0 +1,11 @@
+# Ignorando el Archivo en el cual se guardan las Variables de Entorno
+.env
+
+# Ignorando todos lo Archivos de cache generados por Python y sus Librerias/Modulos/Dependencias
+*.pyc
+
+# Ignorando la Carpeta Logs
+.\Logs
+
+
+# No ignoro el .gitignore para que al clonar el repo se ignoren estos archivos innecesarios
